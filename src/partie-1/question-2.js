@@ -25,22 +25,22 @@ class Board{
         return res
     }
 
-    putQueen(coord){
-        let line = coord[0]
-        let col = Number(coord[1]) - 1 // a1 should be on line a but col 0
+    putQueen(square){
+        let line = square[0]
+        let col = Number(square[1]) - 1 // a1 should be on line a but col 0
         this.board[line][col] = true
     }
 
-    hasQueen(coord){
-        let line = coord[0]
-        let col = Number(coord[1]) - 1 // a1 should be on line a but col 0
+    hasQueen(square){
+        let line = square[0]
+        let col = Number(square[1]) - 1 // a1 should be on line a but col 0
         return this.board[line][col] === true
     }
 
-    removeQueen(coord){
-        if(this.hasQueen(coord)){
-            let line = coord[0]
-            let col = Number(coord[1]) - 1 // a1 should be on line a but col 0
+    removeQueen(square){
+        if(this.hasQueen(square)){
+            let line = square[0]
+            let col = Number(square[1]) - 1 // a1 should be on line a but col 0
             this.board[line][col] = undefined
         }else{
             console.log("There is no queen at this poistion");

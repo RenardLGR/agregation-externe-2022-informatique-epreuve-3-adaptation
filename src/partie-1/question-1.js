@@ -16,7 +16,7 @@
 // 8   9 10 11 12 13 14 15
 // 0   1  2  3  4  5  6  7
 
-function check_solution8queens(sol){
+function checkSolution8queens(sol){
     let sortedSol = sol.sort((a,b) => a-b) //sorted increasingly
     for(let i=0 ; i<sortedSol.length ; i++){
         let square = sortedSol[i] //dame courante
@@ -42,6 +42,6 @@ function check_solution8queens(sol){
 //Le progamme ne vérifie pas que les valeurs de dames sont dans l'intervalle 0 <= dame <= 63 , le test [16 , 13, 28, 33, 50, 67, 62, 47] renvoie True
 //Le programme ne vérifie pas les diagonales, le test [0, 9, 18, 27, 36, 45, 54, 63] renvoie True
 
-// console.log(check_solution8queens([35])); // True
-// console.log(check_solution8queens([16 , 13, 28, 33, 50, 67, 62, 47])); // True
-// console.log(check_solution8queens([0, 9, 18, 27, 36, 45, 54, 63])); // True
+// console.log(checkSolution8queens([35])); // True
+// console.log(checkSolution8queens([16 , 13, 28, 33, 50, 67, 62, 47])); // True
+// console.log(checkSolution8queens([0, 9, 18, 27, 36, 45, 54, 63])); // True
