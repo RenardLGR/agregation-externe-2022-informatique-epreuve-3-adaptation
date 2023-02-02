@@ -1,47 +1,39 @@
 class Board{
     constructor(){
-        this.board = {
-            a: Array(8),
-            b: Array(8),
-            c: Array(8),
-            d: Array(8),
-            e: Array(8),
-            f: Array(8),
-            g: Array(8),
-            h: Array(8),
-        }
-
         this.matrix = Array(8)
         for(let i=0 ; i<8 ; i++){
             this.matrix[i] = Array(8).fill(undefined)
         }
+        // this.matrix[0][0] <==> a1 is bottom left 
     }
 
-    showBoard(){
-        let res = []
-        for(let row in this.board){
-            res.push(this.board[row])
-        }
-        return res
+    showBoard(){ //gives back a matrix 
+        return this.matrix
     }
 
     putQueen(square){
-        let line = square[0]
-        let col = Number(square[1]) - 1 // a1 should be on line a but col 0
-        this.board[line][col] = true
+        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+        let col = letters.indexOf(square[0])
+        let line = Number(square[1]) - 1 // a1 should be on col a but on line 0
+        this.matrix[line][col] = 'queen'
     }
 
     hasQueen(square){
-        let line = square[0]
-        let col = Number(square[1]) - 1 // a1 should be on line a but col 0
-        return this.board[line][col] === true
+        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+        let col = letters.indexOf(square[0])
+        let line = Number(square[1]) - 1 // a1 should be on col a but on line 0
+        return this.matrix[line][col] === 'queen'
     }
 
     removeQueen(square){
+        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
         if(this.hasQueen(square)){
-            let line = square[0]
-            let col = Number(square[1]) - 1 // a1 should be on line a but col 0
-            this.board[line][col] = undefined
+            let col = letters.indexOf(square[0])
+            let line = Number(square[1]) - 1 // a1 should be on col a but on line 0
+            this.matrix[line][col] = undefined
         }else{
             console.log("There is no queen at this poistion");
         }

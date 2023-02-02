@@ -1,26 +1,26 @@
 function queenLegalMoves(square){
     let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
-    let coordLine = square[0]
-    let coordCol = Number(square[1])
+    let coordCol = square[0]
+    let coordLine = Number(square[1])
 
     // let line = Array.from(Array(9).keys()).filter(el => el !== 0 && el !== coordCol)
-    let line = Array.from({length: 8}, (_, i) => i+1).filter(el => el !== coordCol).map(el => coordLine + el)
-    let col = letters.filter(let => let !== coordLine).map(el => el + coordCol)
-
+    let col = Array.from({length: 8}, (_, i) => i+1).filter(el => el !== coordLine).map(el => coordCol + el)
+    let line = letters.filter(let => let !== coordCol).map(el => el + coordLine)
+    
     let diag1 = []
-    for(let i=letters.indexOf(coordLine)+1, j=coordCol+1 ; i<8 && j<=8 ; i++, j++){ //goes top right
+    for(let i=letters.indexOf(coordCol)+1, j=coordLine+1 ; i<8 && j<=8 ; i++, j++){ //goes top right
         diag1.push(letters[i] + j)
     }
-    for(let i=letters.indexOf(coordLine)-1, j=coordCol-1 ; i>=0 && j>0 ; i--, j--){ //goes bottom left
+    for(let i=letters.indexOf(coordCol)-1, j=coordLine-1 ; i>=0 && j>0 ; i--, j--){ //goes bottom left
         diag1.push(letters[i] + j)
     }
-
+    
     let diag2 = []
-    for(let i=letters.indexOf(coordLine)-1, j=coordCol+1 ; i>=0 && j<=8 ; i--, j++){ //goes top left
+    for(let i=letters.indexOf(coordCol)-1, j=coordLine+1 ; i>=0 && j<=8 ; i--, j++){ //goes top left
         diag2.push(letters[i] + j)
     }
-    for(let i=letters.indexOf(coordLine)+1, j=coordCol-1 ; i<8 && j>0 ; i++, j--){ //goes bottom right
+    for(let i=letters.indexOf(coordCol)+1, j=coordLine-1 ; i<8 && j>0 ; i++, j--){ //goes bottom right
         diag2.push(letters[i] + j)
     }
     
