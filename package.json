@@ -1,0 +1,20 @@
+{
+  "name": "agreg-externe-2022-informatique-epreuve-3",
+  "version": "1.0.0",
+  "description": "Adapté du Sujet 2022 de l'épreuve 3 - Etude de cas\r https://agreg-info.org/ressources/",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RenardLGR/agreg-externe-2022-informatique-epreuve-3-adaptation.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RenardLGR/agreg-externe-2022-informatique-epreuve-3-adaptation/issues"
+  },
+  "homepage": "https://github.com/RenardLGR/agreg-externe-2022-informatique-epreuve-3-adaptation#readme",
+  "type": "module"
+}
