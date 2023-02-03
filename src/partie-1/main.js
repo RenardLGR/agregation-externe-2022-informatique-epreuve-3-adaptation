@@ -1,19 +1,6 @@
-import Board from "./question-2.js";
+import Board from "./Board.js";
 import checkSolution8queens from "./question-4.js"
 
-// console.log(checkSolution8queens);
-
-
-let board1 = new Board()
-// console.log(board1.getQueenPosition());
-// board1.putQueen('a1', 'f6')
-// console.log(board.showBoard());
-// console.log(board1.hasQueen('a1'))
-// console.log(board1.getQueenPosition());
-// board1.removeQueen('a1')
-// console.log(board.showBoard());
-// console.log(board1.hasQueen('a1'))
-// console.log(board1.getQueenPosition());
 
 
 let board2 = new Board()
