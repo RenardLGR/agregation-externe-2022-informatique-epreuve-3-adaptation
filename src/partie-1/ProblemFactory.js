@@ -4,6 +4,8 @@ import King from "./King.js";
 import Queen from "./Queen.js";
 import Rook from "./Rook.js";
 
+//This is a sketch of what ProblemFactory would look like :
+
 class ProblemFactory{
     constructor(arrayPieces){ //[ [Rook, 4] , [Queen, 4] ]
         this.arrayPieces = arrayPieces

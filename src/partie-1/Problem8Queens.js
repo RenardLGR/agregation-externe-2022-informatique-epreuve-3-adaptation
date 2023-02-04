@@ -24,7 +24,7 @@ export default class Problem8Queens {
         }
     }
 
-    proposeSolution(board) {
+    proposeSolution(board) { // Keep track of the solutions proposed
         let matrix = board.showBoard()
         let checkRes = this.checkSolution8queens(board)
         let sol = []

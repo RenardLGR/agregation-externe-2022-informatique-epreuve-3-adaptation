@@ -75,3 +75,8 @@ board2.putPiece(['e3', 'f1', 'g7', 'h6'], Rook)
 //This is not a valid solution
 
 console.log(problem4Rooks4Queens.checkSolution(board2)); // False
+
+// ProblemFactory prendra en entrée une Array d'Array [Class, num] et, supposant un board contenant exactement ces pièces, nous chercherons à déterminer qu'aucune ne puisse en prendre une autre.
+// Après des vérifications d'entrées, nous déterminerons la position de chaque pièce sur le board grâce à la méthode board.getPiecePosition(Class)
+// Nous déterminerons ensuite les mouvemenst légaux de chaque pièce grâce à la méthode Piece.legalMove(pos) propre à chaque pièce.
+// Nous vérifierons qu'aucune pièce ne soit dans ces mouvements.
