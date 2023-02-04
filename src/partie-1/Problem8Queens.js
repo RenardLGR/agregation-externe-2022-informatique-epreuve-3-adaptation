@@ -4,7 +4,7 @@ export default class Problem8Queens {
     }
 
     checkSolution8queens(board) {
-        let queenPositions = board.getQueenPosition() //Array of queen pos
+        let queenPositions = board.getQueenPositions() //Array of queen pos
 
         if(queenPositions.length !== 8) {
             console.log("Invalid number of queens");

@@ -55,7 +55,7 @@ export default class Board{
         return this.matrix[line][col] !== undefined
     }
 
-    getPiece(square){ // square : coord // return String
+    getPiece(square){ // square : coord // return String || Object
         let [col, line] = this.lineColSplitter(square)
         return this.matrix[line][col] === undefined ? "None" : this.matrix[line][col]
     }
@@ -69,7 +69,27 @@ export default class Board{
         }
     }
 
-    getQueenPosition(){ // return Array of coords
+    getPiecePosition(pieceStruct){ // constructor // return Array of coords
+        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+        let res = []
+        for(let line=0 ; line<8 ; line++){
+            for(let col=0 ; col<8 ; col++){
+                if(this.matrix[line][col] !== undefined){
+                    let piece = this.matrix[line][col]
+                    if(piece instanceof pieceStruct){
+                        let letterTemp = letters[col]
+                        let numTemp = line+1
+                        res.push(''+letterTemp+numTemp)
+                    }
+                }
+            }
+        }
+
+        return res
+    }
+
+    getQueenPositions(){ // return Array of coords
         let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
         let res = []
