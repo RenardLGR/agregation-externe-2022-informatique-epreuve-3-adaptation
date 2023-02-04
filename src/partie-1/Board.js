@@ -13,54 +13,69 @@ export default class Board{
     }
 
     showBoard(){ //gives back a matrix 
-        return this.matrix
+        return this.matrix.slice()
+    }
+
+    isCoordValid(coord){
+        if(typeof coord !== 'string'){
+            return false
+        }
+        if(coord.length !== 2){
+            return false
+        }
+        let nums = '12345678'
+        let letters = 'abcdefgh'
+        if(!letters.includes(coord[0]) || !nums.includes(coord[1])){
+            return false
+        }
+
+        return true
+    }
+
+    lineColSplitter(coord){
+        if(this.isCoordValid(coord)){
+            let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+            let col = letters.indexOf(coord[0])
+            let line = Number(coord[1]) - 1 // a1 should be on col a but on line 0
+            return [col, line]
+        }else{
+            throw new Error("Coord input invalid")
+        }
     }
 
     putPiece(squares, piece){ // squares : Array of coord, piece : Object piece
-        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-
         squares.forEach(square => {
-            let col = letters.indexOf(square[0])
-            let line = Number(square[1]) - 1 // a1 should be on col a but on line 0
+            let [col, line] = this.lineColSplitter(square)
             this.matrix[line][col] = new piece(square)
         })
     }
 
     hasPiece(square){ // square : coord // return Bool
-        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-
-        let col = letters.indexOf(square[0])
-        let line = Number(square[1]) - 1 // a1 should be on col a but on line 0
+        let [col, line] = this.lineColSplitter(square)
         return this.matrix[line][col] !== undefined
     }
 
     getPiece(square){ // square : coord // return String
-        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-
-        let col = letters.indexOf(square[0])
-        let line = Number(square[1]) - 1 // a1 should be on col a but on line 0
+        let [col, line] = this.lineColSplitter(square)
         return this.matrix[line][col] === undefined ? "None" : this.matrix[line][col]
     }
 
-    removeQueen(square){
-        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-
-        if(this.hasQueen(square)){
-            let col = letters.indexOf(square[0])
-            let line = Number(square[1]) - 1 // a1 should be on col a but on line 0
+    removePiece(square){
+        if(this.hasPiece(square)){
+            let [col, line] = this.lineColSplitter(square)
             this.matrix[line][col] = undefined
         }else{
-            console.log("There is no queen at this poistion");
+            console.log("There is no piece at this poistion");
         }
     }
 
-    getQueenPosition(){
+    getQueenPosition(){ // return Array of coords
         let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
         let res = []
         for(let line=0 ; line<8 ; line++){
             for(let col=0 ; col<8 ; col++){
-                if(this.matrix[line][col].name === 'Queen'){
+                if(this.matrix[line][col] !== undefined && this.matrix[line][col].name === 'Queen'){
                     let letterTemp = letters[col]
                     let numTemp = line+1
                     res.push(''+letterTemp+numTemp)
@@ -71,13 +86,3 @@ export default class Board{
         return res
     }
 }
-
-let board1 = new Board() 
-board1.putPiece(['a1'], Queen) 
-board1.putPiece(['b3'], Rook)
-console.log(board1.hasPiece('a2')) // False 
-let queen = board1.getPiece('a1') // Queen
-let rook1 = board1.getPiece('b3') // Rook
-
-console.log(queen);
-console.log(rook1);
