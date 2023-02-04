@@ -3,6 +3,7 @@ import Queen from "./Queen.js";
 export default class Bishop extends Queen{
     constructor(pos){
         super(pos)
+        this.name = 'Bishop'
     }
 
     legalMoves() {

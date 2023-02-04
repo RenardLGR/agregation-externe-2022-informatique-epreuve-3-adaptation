@@ -3,6 +3,7 @@ import Queen from "./Queen.js";
 export default class King extends Queen{
     constructor(pos){
         super(pos)
+        this.name = 'King'
     }
 
     legalMoves() {

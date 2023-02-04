@@ -1,6 +1,7 @@
 export default class Queen{
     constructor(pos){
         this.pos = pos
+        this.name = 'Queen'
     }
 
     legalMoves() {
