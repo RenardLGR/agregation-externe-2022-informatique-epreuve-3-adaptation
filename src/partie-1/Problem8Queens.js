@@ -5,7 +5,28 @@ export default class Problem8Queens {
 
     checkSolution8queens(board) {
         let queenPositions = board.getQueenPositions() //Array of queen pos
+        // return this.checkSolution8queensWithCoords(queenPositions)
+        if(queenPositions.length !== 8) {
+            console.log("Invalid number of queens");
+            return false
+        }else{
+            //to return true, no legal moves of every queens should have a queenPos in them
+            for (let i = 0; i < queenPositions.length; i++) {
+                let pos = queenPositions[i]
+                let queenMoves = this.queenLegalMoves(pos)
+                for (let j = 0; j < queenMoves.length; j++) {
+                    if (queenPositions.includes(queenMoves[j])) {
+                        return false
+                    }
+                }
+            }
+            return true
+        }
+    }
 
+    checkSolution8queensWithCoords(coords){
+        //Same than above but takes coords instead of a board
+        let queenPositions = coords
         if(queenPositions.length !== 8) {
             console.log("Invalid number of queens");
             return false
