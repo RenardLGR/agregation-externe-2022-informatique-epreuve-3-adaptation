@@ -42,20 +42,20 @@ const addToSolution = () => {
     nCall++
 
     let res = a.slice() //Garde une copie profonde de la configuration actuelle
-    res = res.map(el => {
-        let arr = Array(N).fill(0)
-        arr[el] = 1
-        return arr
+    //Si res[3] = 5, la reine de la colonne 3 est sur la ligne 5 <=> Sur la ligne 5, la reine est sur la colonne 3
+    res = res.map(col => {
+        let line = Array(N).fill(0)
+        line[col] = 1
+        return line.slice()
     })
 
 
-    res = res.map(matrix => getQueenPositions(matrix)) // Configuration actuelle sous format coordonnées
+    res = getQueenPositions(res) // Configuration actuelle sous format coordonnées
 
     solutions.push(res.slice())
 
     function getQueenPositions(board){ // return Array of coords
         let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-
         let res = []
         for(let line=0 ; line<8 ; line++){
             for(let col=0 ; col<8 ; col++){
@@ -95,10 +95,14 @@ const permute_8queens = (s) => {
 };
 
 //Call with the column 0
-permute_8queens(0)
+permute_8queens(0) // in 0.201 seconds
 
 // console.log(nCall); // 92
 
 let problem = new Problem8Queens()
+// console.log(solutions);
 
 // console.log(solutions.every(ans => problem.checkSolution8queensWithCoords(ans))); // True
+
+
+export default solutions

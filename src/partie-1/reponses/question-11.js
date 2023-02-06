@@ -136,7 +136,7 @@ function eightQueensPositionsOptimized() {
     }
 }
 
-// let everyAnswers = eightQueensPositionsOptimized()
+let everyAnswers = eightQueensPositionsOptimized() // in 0.246 seconds
 let problem = new Problem8Queens()
 
 // console.log(everyAnswers.every(ans => problem.checkSolution8queensWithCoords(ans))); // True
@@ -146,3 +146,6 @@ let problem = new Problem8Queens()
 // Question 11. Programmer une fonction Python solve_walker qui parcoure l’espace des board contenant 8 dames et qui s’arrête dès qu’ont été trouvées x board solutions au problème des 8 dames (0 < x ≤ 92) en imprimant sur la sortie écran chaque solution trouvée. Sachant qu’il existe 92 solutions au problème des 8 dames, on peut dire que cette fonction propose un algorithme qui résout le problème des 8 dames. Est-ce que la connaissance du nombre de solutions (92) est nécessaire ?
 
 // Non mais elle permet d'écarter des algorithmes faux sans toutefois prouver qu'un algorithme retournant 92 solutions retourne une solution correcte au problème.
+
+
+export default everyAnswers
