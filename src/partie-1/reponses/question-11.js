@@ -77,9 +77,12 @@ function eightQueensPositionsNaive() {
 
 /* SECOND WAY : BACKTRACK IF ON A ROW/COL/DIAGONAL OF AN EXISTING QUEEN */
 function eightQueensPositionsOptimized() {
-    //Return every 92 solutions as an Array of matrices with 1 being a queen
+    //Return every 92 solutions as an Array of coords
     let positions = [];
     let board = Array(8).fill(0).map(() => Array(8).fill(0));
+
+    solve(0);
+    return positions.map(matrix => getQueenPositions(matrix))
 
     function isValid(row, col) {
         // Check if there is a queen in the same column
@@ -113,9 +116,6 @@ function eightQueensPositionsOptimized() {
             }
         }
     }
-
-    solve(0);
-    return positions.map(matrix => getQueenPositions(matrix))
 
 
     function getQueenPositions(board){ // return Array of coords

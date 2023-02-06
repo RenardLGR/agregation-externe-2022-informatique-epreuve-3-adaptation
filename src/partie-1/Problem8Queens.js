@@ -72,7 +72,7 @@ export default class Problem8Queens {
         return `${stats[0]} solution(s), ${stats[1]} valide(s)`
     }
 
-    queenLegalMoves(square) { // return Array of legal moves pos
+    queenLegalMoves(square) { // return Array of legal moves from a pos
         let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
         let coordCol = square[0]
@@ -100,4 +100,68 @@ export default class Problem8Queens {
 
         return line.concat(col).concat(diag1).concat(diag2)
     }
+
+    everySolutions() { //this is based on question 11
+        //Return every 92 solutions as an Array of coords
+        let positions = [];
+        let board = Array(8).fill(0).map(() => Array(8).fill(0));
+
+        solve(0);
+        return positions.map(matrix => getQueenPositions(matrix))
+    
+        function isValid(row, col) {
+            // Check if there is a queen in the same column
+            for (let i = 0; i < row; i++) {
+                if (board[i][col]) return false;
+            }
+            // Check upper left diagonal
+            for (let i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+                if (board[i][j]) return false;
+            }
+            // Check upper right diagonal
+            for (let i = row, j = col; i >= 0 && j < 8; i--, j++) {
+                if (board[i][j]) return false;
+            }
+    
+            return true;
+        }
+    
+        function solve(row) {
+            if (row === 8) {
+                positions.push([...board.map((r) => r.slice())]);
+                return;
+            }
+    
+            for (let col = 0; col < 8; col++) {
+                if (isValid(row, col)) {
+                    board[row][col] = 1;
+                    solve(row + 1);
+                    // Backtracking :
+                    board[row][col] = 0;
+                }
+            }
+        }
+    
+    
+        function getQueenPositions(board){ // return Array of coords
+            let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+    
+            let res = []
+            for(let line=0 ; line<8 ; line++){
+                for(let col=0 ; col<8 ; col++){
+                    if(board[line][col] === 1){
+                        let letterTemp = letters[col]
+                        let numTemp = line+1
+                        res.push(''+letterTemp+numTemp)
+                    }
+                }
+            }
+    
+            return res
+        }
+    }
 }
+
+let problem = new Problem8Queens()
+
+// console.log(problem.everySolutions());
