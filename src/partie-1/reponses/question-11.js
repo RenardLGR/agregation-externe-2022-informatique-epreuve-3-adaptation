@@ -6,45 +6,77 @@ import Rook from "../Rook.js";
 import Problem8Queens from "../Problem8Queens.js";
 
 
-// function createCoord(){
-//     let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+/* FIRST WAY : TEST EVER COORDS */
+function eightQueensPositionsNaive() {
+    //returns the 92 solutions as an Array of coords
+    //It tries every queen placements
+    let result = [];
+    let board = [[0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+    ];
 
-//     let cpt = -50
+    let tested = 0
+    placeOne(board, 0);
+    console.log("Tested : ", tested); // 16777216
+    console.log("Number of results : ", result.length); // 92
+    return result.map(matrix => getQueenPositions(matrix))
+    //return result;
 
-//     f(0, 0, 1, [])
+    function placeOne(board, row) {
+        if (row === 8) {
+            tested++
+            if(isValid(board)){
+                result.push(board.map(x => x.slice()));
+            }
+            return;
+        }
 
-//     function f(length, letterIdx, number, inProgress){
+        for (let i = 0; i < 8; i++) {
+            board[row][i] = 1;
+            //Trying
+            placeOne(board, row + 1);
+            //Backtracking
+            board[row][i] = 0;
+        }
 
-//         if(length === 8){
-//             cpt++
-//             let noDuplicate = inProgress.every((el, idx, arr) => arr.indexOf(el) === idx)
-//             if(noDuplicate){
-//                 //check board, add it if solution is working
-//                 console.log(inProgress);
-//             }
-//             return
-//         }
+    }
 
-//         for(let l=letterIdx ; letterIdx<letters.length-1 && cpt<15 ; l++){
-//             for(let num=number ; num<=8 && cpt<15 ; num++){
-//                 let pos = letters[l] + num
-//                 //letter stays the same, increase number
-//                 f(length+1, l, number+1, [...inProgress, pos])
-//             }
-//             //backtracking + increase letter
-//             //inProgress.pop()
-//             f(length, l+1, 1, inProgress)
-//         }
-//         //backtracking + increase letter
-//         //inProgress.pop()
-//         f(length, letterIdx+1, 1, inProgress)
+    function isValid(board){ //checks if a matrix as an Array of Array of 0s and 1s is valid
+        let problem = new Problem8Queens()
+        let positions = getQueenPositions(board)
+        return problem.checkSolution8queensWithCoords(positions)
+    }
 
-//     }
-// }
+    function getQueenPositions(board){ // return Array of coords
+        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
-//createCoord() // Doesn't work :(
+        let res = []
+        for(let line=0 ; line<8 ; line++){
+            for(let col=0 ; col<8 ; col++){
+                if(board[line][col] === 1){
+                    let letterTemp = letters[col]
+                    let numTemp = line+1
+                    res.push(''+letterTemp+numTemp)
+                }
+            }
+        }
 
-function eightQueensPositions() {
+        return res
+    }
+}
+
+//console.log(eightQueensPositionsNaive());
+
+
+
+/* SECOND WAY : BACKTRACK IF ON A ROW/COL/DIAGONAL OF AN EXISTING QUEEN */
+function eightQueensPositionsOptimized() {
     //Return every 92 solutions as an Array of matrices with 1 being a queen
     let positions = [];
     let board = Array(8).fill(0).map(() => Array(8).fill(0));
@@ -83,26 +115,34 @@ function eightQueensPositions() {
     }
 
     solve(0);
-    return positions;
-}
+    return positions.map(matrix => getQueenPositions(matrix))
 
-function toCoord(positions) {
-    //return every 92 solutions from above as Array of coords like 'a1', 'b4', etc
-    let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    return positions.map(matrix => {
-        let coord = []
-        for (let row = 0; row < 8; row++) {
-            for (let col = 0; col < 8; col++) {
-                if (matrix[row][col] === 1) {
-                    coord.push(letters[col] + (row + 1));
+
+    function getQueenPositions(board){ // return Array of coords
+        let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+        let res = []
+        for(let line=0 ; line<8 ; line++){
+            for(let col=0 ; col<8 ; col++){
+                if(board[line][col] === 1){
+                    let letterTemp = letters[col]
+                    let numTemp = line+1
+                    res.push(''+letterTemp+numTemp)
                 }
             }
         }
-        return coord.slice()
-    })
+
+        return res
+    }
 }
 
-let everyAnswers = toCoord(eightQueensPositions())
+// let everyAnswers = eightQueensPositionsOptimized()
 let problem = new Problem8Queens()
 
 // console.log(everyAnswers.every(ans => problem.checkSolution8queensWithCoords(ans))); // True
+
+
+
+// Question 11. Programmer une fonction Python solve_walker qui parcoure l’espace des board contenant 8 dames et qui s’arrête dès qu’ont été trouvées x board solutions au problème des 8 dames (0 < x ≤ 92) en imprimant sur la sortie écran chaque solution trouvée. Sachant qu’il existe 92 solutions au problème des 8 dames, on peut dire que cette fonction propose un algorithme qui résout le problème des 8 dames. Est-ce que la connaissance du nombre de solutions (92) est nécessaire ?
+
+// Non mais elle permet d'écarter des algorithmes faux sans toutefois prouver qu'un algorithme retournant 92 solutions retourne une solution correcte au problème.
