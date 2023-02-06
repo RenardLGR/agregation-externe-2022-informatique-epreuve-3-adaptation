@@ -14,3 +14,5 @@ function areSolutionsEqual(sol1, sol2){
 }
 
 // console.log(areSolutionsEqual(solutionsQ11, solutionsQ12)); // True
+
+// L'algorithme de la question 10 a déjà des difficulté à trouver 1 résultat, il est en pratique impossible de trouver les 92 résultats, seuls les oslutions des questions 11 et 12 seront testées.

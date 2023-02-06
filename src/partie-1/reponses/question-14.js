@@ -2,3 +2,10 @@
 
 
 //Le développeur aura juste à ajouter la fonction solve en tant que méthode de la classe Problem8Queens, instancier la classe et appeler cette méthode.
+
+// Il est possible de passer une fonction en argument :
+// function giveMeYourAlgo(algo){
+//     return algo()
+// }
+
+// Il peut aussi comparer sa solution grâce à l'algorithme de comparaison proposé en question 13.
