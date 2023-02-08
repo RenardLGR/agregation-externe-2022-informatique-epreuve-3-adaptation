@@ -1,0 +1,1 @@
+// La classe Queen, et, donc, les autres pièces par héritage comprendra maintenant un constructeur avec sa couleur

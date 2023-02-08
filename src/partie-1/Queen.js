@@ -1,7 +1,8 @@
 export default class Queen{
-    constructor(pos){
+    constructor(pos, color){
         this.pos = pos
         this.name = 'Queen'
+        this.color = color || 'black'
     }
 
     legalMoves() {
@@ -37,3 +38,4 @@ export default class Queen{
         return this.pos
     }
 }
+
