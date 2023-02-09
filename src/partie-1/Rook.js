@@ -1,8 +1,8 @@
 import Queen from "./Queen.js";
 
 export default class Rook extends Queen{
-    constructor(pos){
-        super(pos)
+    constructor(pos, color){
+        super(pos, color)
         this.name = 'Rook'
     }
 

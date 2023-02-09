@@ -9,14 +9,15 @@ export default class Board{
         for(let i=0 ; i<8 ; i++){
             this.matrix[i] = Array(8).fill(undefined)
         }
-        // this.matrix[0][0] <==> a1 is bottom left 
+        // this.matrix[0][0] <==> a1 is bottom left
+        this.isWhiteToPlay = true
     }
 
     showBoard(){ //gives back a matrix 
         return this.matrix.slice()
     }
 
-    isCoordValid(coord){
+    isCoordValid(coord){ //Check if a coord as a String is valid
         if(typeof coord !== 'string'){
             return false
         }
@@ -32,21 +33,25 @@ export default class Board{
         return true
     }
 
-    lineColSplitter(coord){
+    lineColSplitter(coord){ //split a String coord as an array [Number col, Number line], both 0-indexed
         if(this.isCoordValid(coord)){
             let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
             let col = letters.indexOf(coord[0])
             let line = Number(coord[1]) - 1 // a1 should be on col a but on line 0
             return [col, line]
         }else{
-            throw new Error("Coord input invalid")
+            throw new Error("Coord input invalid!")
         }
     }
 
-    putPiece(squares, piece){ // squares : Array of coord, piece : Object piece
+    putPiece(squares, piece, color='black'){ // squares : Array of coord, piece : Object piece, color : String
+        if( (color!=='black') && (color!=='white') ){
+            throw new Error("Color input invalid!")
+        }
+
         squares.forEach(square => {
             let [col, line] = this.lineColSplitter(square)
-            this.matrix[line][col] = new piece(square)
+            this.matrix[line][col] = new piece(square, color)
         })
     }
 
@@ -60,16 +65,141 @@ export default class Board{
         return this.matrix[line][col] === undefined ? "None" : this.matrix[line][col]
     }
 
+    movePiece(fromCoord, toCoord){ // 2 Strings // Void
+        if(!this.isCoordValid(fromCoord) || !this.isCoordValid(toCoord)){
+            throw new Error("Coord input invalid!")
+        }
+
+
+        if(!this.hasPiece(fromCoord)){
+            throw new Error("movePiece failed, there is no piece to move from here!")
+        }
+
+        let piece = this.getPiece(fromCoord)
+
+        if( (this.isWhiteToPlay && piece.color === 'black') || (!this.isWhiteToPlay && piece.color === 'white') ){
+            let errMsg = `movePiece failed, you can only move a ${this.isWhiteToPlay ? 'white' : 'black'} piece!`
+            throw new Error(errMsg)
+        }
+
+        let legalMoves = piece.legalMoves()
+
+        if(!legalMoves.includes(toCoord)){
+            throw new Error("movePiece failed, this movement is illegal!")
+        }
+
+        if(!this.isPathFree(fromCoord, toCoord)){
+            throw new Error("movePiece failed, something is blocking!")
+        }
+
+        if(this.hasPiece(toCoord)){
+            if(this.getPiece(fromCoord).color === this.getPiece(toCoord).color){
+                throw new Error("movePiece failed, you can't take your own piece!")
+            }else{
+                console.log("A piece has been taken!");
+                //TODO : piece has been taken, add point, add to cemetery, etc
+            }
+        }
+
+        let [colTo, lineTo] = this.lineColSplitter(toCoord)
+
+        this.matrix[lineTo][colTo] = piece
+        this.removePiece(fromCoord)
+
+        this.isWhiteToPlay = !this.isWhiteToPlay
+        console.log("Movement successful!");
+    }
+
+    isPathFree(fromCoord, toCoord){ // 2 Strings // Bool : check if a movement is free to do
+        //if number is increasing => line is increasing (go up)
+        //if letter is increasing => col in increasing (go right)
+        //if number and letter are increasing => diagonal is increasing go up right
+        //if number is increasing and letter is decreasing => diagonal is increasing go up left
+        //decreasing => opposite
+        
+        let [colFrom, lineFrom] = this.lineColSplitter(fromCoord)
+        let [colTo, lineTo] = this.lineColSplitter(toCoord)
+
+        let isNumIncreasing = lineFrom < lineTo
+        let isLetterIncreasing = colFrom < colTo
+
+        if(isNumIncreasing && isLetterIncreasing){ //up right
+            for(let lin=lineFrom+1, col=colFrom+1 ; lin<lineTo && col<colTo ; lin++, col++){
+                if(this.matrix[lin][col] !== undefined){
+                    return false
+                }
+            }
+        }
+
+        if(isNumIncreasing && !isLetterIncreasing){ //up left
+            for(let lin=lineFrom+1, col=colFrom-1 ; lin<lineTo && col>colTo ; lin++, col--){
+                if(this.matrix[lin][col] !== undefined){
+                    return false
+                }
+            }
+        }
+
+        if(!isNumIncreasing && isLetterIncreasing){ //bottom right
+            for(let lin=lineFrom-1, col=colFrom+1 ; lin>lineTo && col<colTo ; lin--, col++){
+                if(this.matrix[lin][col] !== undefined){
+                    return false
+                }
+            }
+        }
+
+        if(isNumIncreasing && !isLetterIncreasing){ //bottom left
+            for(let lin=lineFrom-1, col=colFrom-1 ; lin>lineTo && col>colTo ; lin--, col--){
+                if(this.matrix[lin][col] !== undefined){
+                    return false
+                }
+            }
+        }
+
+        if(isNumIncreasing){ //up
+            for(let lin=lineFrom+1 ; lin<lineTo ; lin++){
+                if(this.matrix[lin][colTo] !== undefined){
+                    return false
+                }
+            }
+        }
+
+        if(!isNumIncreasing){ //bottom
+            for(let lin=lineFrom-1 ; lin>lineTo ; lin--){
+                if(this.matrix[lin][colTo] !== undefined){
+                    return false
+                }
+            }
+        }
+
+        if(isLetterIncreasing){ //right
+            for(let col=colFrom+1 ; col<colTo ; col++){
+                if(this.matrix[lineTo][col] !== undefined){
+                    return false
+                }
+            }
+        }
+
+        if(!isLetterIncreasing){ //left
+            for(let col=colFrom-1 ; col>colTo ; col--){
+                if(this.matrix[lineTo][col] !== undefined){
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
     removePiece(square){
         if(this.hasPiece(square)){
             let [col, line] = this.lineColSplitter(square)
             this.matrix[line][col] = undefined
         }else{
-            console.log("There is no piece at this poistion");
+            throw new Error("There is no piece at this poistion");
         }
     }
 
-    getPiecePosition(pieceStruct){ // constructor // return Array of coords
+    getPiecePosition(pieceStruct){ // constructor // return Array of coords of every positions of 1 Piece
         let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
         let res = []

@@ -1,8 +1,8 @@
 import Queen from "./Queen.js";
 
 export default class Bishop extends Queen{
-    constructor(pos){
-        super(pos)
+    constructor(pos, color){
+        super(pos, color)
         this.name = 'Bishop'
     }
 
