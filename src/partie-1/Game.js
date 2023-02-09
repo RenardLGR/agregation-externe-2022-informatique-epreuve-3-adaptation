@@ -4,7 +4,7 @@ import King from "./King.js";
 import Queen from "./Queen.js";
 import Rook from "./Rook.js";
 
-class Game{
+export default class Game{
     constructor(){
         this.board = new Board()
         this.putStandardPosition()
@@ -21,6 +21,10 @@ class Game{
         this.board.putPiece(['a8', 'h8'], Rook, 'black')
         this.board.putPiece(['e8'], King, 'black')
         this.board.putPiece(['d8'], Queen, 'black')
+    }
+
+    showBoard(){
+        return this.board.showBoard()
     }
 
     movePiece(fromCoord, toCoord){
