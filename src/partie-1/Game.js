@@ -8,6 +8,7 @@ class Game{
     constructor(){
         this.board = new Board()
         this.putStandardPosition()
+        this.isWhiteToPlay = true
     }
 
     putStandardPosition(){
@@ -20,5 +21,14 @@ class Game{
         this.board.putPiece(['a8', 'h8'], Rook, 'black')
         this.board.putPiece(['e8'], King, 'black')
         this.board.putPiece(['d8'], Queen, 'black')
+    }
+
+    movePiece(fromCoord, toCoord){
+        try {
+            this.board.movePiece(fromCoord, toCoord)
+            this.isWhiteToPlay = !this.isWhiteToPlay
+        } catch (error) {
+            console.log(error);
+        }
     }
 }

@@ -103,7 +103,8 @@ export default class Board{
 
         let [colTo, lineTo] = this.lineColSplitter(toCoord)
 
-        this.matrix[lineTo][colTo] = piece
+        this.matrix[lineTo][colTo] = piece //change coord in Board
+        piece.newPos(toCoord) //change coord in Piece
         this.removePiece(fromCoord)
 
         this.isWhiteToPlay = !this.isWhiteToPlay

@@ -6,6 +6,8 @@
 
 //putPiece(squares, piece, color='black'){} => Void prend mainetanat une couleur en argument defaulté à 'black'
 
+//Les pièces gèrent elles-aussi leur position
+
 
 import Board from "../Board.js";
 import Bishop from "../Bishop.js";

@@ -34,6 +34,10 @@ export default class Queen{
         return line.concat(col).concat(diag1).concat(diag2)
     }
 
+    newPos(square){
+        this.pos = square
+    }
+
     logPos(){
         return this.pos
     }
