@@ -33,3 +33,5 @@ game.movePiece('c1', 'h6')
 console.log(game.showBoard())
 game.movePiece('h8', 'h6')
 console.log(game.showBoard())
+
+game.movePiece('h1', 'a8') //movePiece failed, this movement is illegal!

@@ -1,8 +1,8 @@
 import Queen from "./Queen.js";
 
 export default class King extends Queen{
-    constructor(pos, color){
-        super(pos, color)
+    constructor(pos, color, hasMove){
+        super(pos, color, hasMove)
         this.name = 'King'
     }
 
@@ -44,8 +44,8 @@ export default class King extends Queen{
 }
 
 
-let king1 = new King('b3')
-let king2 = new King('a6')
+// let king1 = new King('b3')
+// let king2 = new King('a6')
 // console.log(king1.logPos());
 // console.log(king1.legalMoves());
 // console.log(king2.legalMoves());

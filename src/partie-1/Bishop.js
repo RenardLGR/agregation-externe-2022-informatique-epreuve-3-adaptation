@@ -1,8 +1,8 @@
 import Queen from "./Queen.js";
 
 export default class Bishop extends Queen{
-    constructor(pos, color){
-        super(pos, color)
+    constructor(pos, color, hasMove){
+        super(pos, color, hasMove)
         this.name = 'Bishop'
     }
 
@@ -33,8 +33,8 @@ export default class Bishop extends Queen{
 }
 
 
-let bishop1 = new Bishop('b3')
-let bishop2 = new Bishop('a6')
+// let bishop1 = new Bishop('b3')
+// let bishop2 = new Bishop('a6')
 // console.log(bishop1.logPos());
 // console.log(bishop1.legalMoves());
 // console.log(bishop2.legalMoves());

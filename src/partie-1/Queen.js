@@ -3,6 +3,7 @@ export default class Queen{
         this.pos = pos
         this.name = 'Queen'
         this.color = color || 'black'
+        this.hasMove = false
     }
 
     legalMoves() {

@@ -1,8 +1,8 @@
 import Queen from "./Queen.js";
 
 export default class Rook extends Queen{
-    constructor(pos, color){
-        super(pos, color)
+    constructor(pos, color, hasMove){
+        super(pos, color, hasMove)
         this.name = 'Rook'
     }
 
@@ -20,8 +20,8 @@ export default class Rook extends Queen{
 }
 
 
-let rook1 = new Rook('b3')
-let rook2 = new Rook('a6')
+// let rook1 = new Rook('f1')
+// let rook2 = new Rook('a6')
 // console.log(rook1.logPos());
 // console.log(rook1.legalMoves());
 // console.log(rook2.legalMoves());
