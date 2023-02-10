@@ -3,14 +3,16 @@
 
 //Ajout de hasMove dans le constructeur de Queen fixé par défaut à False, mis à jour à True dès que movePiece est fait ou qu'un roque est effectué
 
-// Ajout de isKingChecked(kingPos) qui vérifie que le roi qui essaye de roque n'est pas en échec
+// Ajout de isKingChecked(kingPos) qui vérifie que le roi qui essaye de roque n'est pas en échec : Chaque pièce de la couleur opposée ayant accès au roi entraînera is mise en échec.
 
 //Ajout de isMoveCastleAttempt(fromCoord, toCoord) qui oriente movePiece(fromCoord, toCoord) vers un mouvement normal ou un mouvement de type roque.
+//Regarde les coordonnées de départ et d'arrivée tentées.
 
 //Ajout de castle(fromCoord, toCoord) qui fait les vérifications et effectue le mouvement.
 
 
 import Game from "../Game.js";
+import Rook from "../Rook.js";
 
 
 let game = new Game()
@@ -20,6 +22,8 @@ game.movePiece('f1', 'b5') //white move
 // console.log(game.showBoard())
 game.movePiece('c8', 'a6') //black move
 // console.log(game.showBoard())
+// game.board.removePiece('h8')
+// game.board.putPiece(['g8'], Rook, 'black')
 game.movePiece('e1', 'g1') //castle white
 // console.log(game.showBoard())
 game.movePiece('d8', 'd7') //black move
@@ -45,3 +49,5 @@ game.movePiece('d8', 'd7') //black move
 // game.movePiece('e8', 'c8') //black castle attempt, King has already moved
 // ____________
 //trying to castle a wrong color king tried also
+// ____________
+//trying to castle when transit or path is not secured tried also

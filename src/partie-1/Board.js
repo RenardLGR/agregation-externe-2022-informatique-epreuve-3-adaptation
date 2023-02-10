@@ -266,6 +266,10 @@ export default class Board{
             throw new Error("Castle failed, King is checked")
         }
 
+        if(!this.isCastleTransitSecured(fromCoord, toCoord)){
+            throw new Error("Castle failed, transit or Rook is not secured")
+        }
+
         let isLeftCastle = (toCoord[0] === 'c')
 
         if(isLeftCastle){ //left castle
@@ -393,6 +397,86 @@ export default class Board{
         }
 
         return [true, "Oh oh King is in danger"]
+    }
+
+    isCastleTransitSecured(fromCoord, toCoord){ //2 Strings // Bool
+        //check if the empty spots between the King and the Rook, aswell as the Rook are secured for a castle to happen
+        //this function could use refactoring as it is not DRY and it is basically isKingChecked() but for every transit square and Rook
+        let isLeftCastle = (toCoord[0] === 'c')
+        let isBottomCastle = (toCoord[1] === '1')
+        let castleColor = this.getPiece(fromCoord).color
+        let res = true
+
+        if(isLeftCastle && isBottomCastle){ //left bottom castle
+            ['a1','b1','c1','d1'].forEach(sqr => {
+                for(let lin=0 ; lin<8 ; lin++){
+                    for(let col=0 ; col<8 ; col++){
+                        if(this.matrix[lin][col] !== undefined){
+                            if(this.matrix[lin][col].color !== castleColor ){
+                                let coord = this.getCoordAsString(lin, col)
+                                if(this.canIGoToKing(coord, sqr)[0]){
+                                    res = false
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+        if(!isLeftCastle && isBottomCastle){ //right bottom castle
+            ['f1','g1','h1'].forEach(sqr => {
+                for(let lin=0 ; lin<8 ; lin++){
+                    for(let col=0 ; col<8 ; col++){
+                        if(this.matrix[lin][col] !== undefined){
+                            if(this.matrix[lin][col].color !== castleColor ){
+                                let coord = this.getCoordAsString(lin, col)
+                                if(this.canIGoToKing(coord, sqr)[0]){
+                                    res = false
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+        
+        if(isLeftCastle && !isBottomCastle){ //left top castle
+            ['a8','b8','c8','d8'].forEach(sqr => {
+                for(let lin=0 ; lin<8 ; lin++){
+                    for(let col=0 ; col<8 ; col++){
+                        if(this.matrix[lin][col] !== undefined){
+                            if(this.matrix[lin][col].color !== castleColor ){
+                                let coord = this.getCoordAsString(lin, col)
+                                if(this.canIGoToKing(coord, sqr)[0]){
+                                    res = false
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+        if(!isLeftCastle && !isBottomCastle){ //right top castle
+            ['f8','g8', 'h8'].forEach(sqr => {
+                for(let lin=0 ; lin<8 ; lin++){
+                    for(let col=0 ; col<8 ; col++){
+                        if(this.matrix[lin][col] !== undefined){
+                            if(this.matrix[lin][col].color !== castleColor ){
+                                let coord = this.getCoordAsString(lin, col)
+                                if(this.canIGoToKing(coord, sqr)[0]){
+                                    res = false
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+
+        return res
     }
 
     removePiece(square){
