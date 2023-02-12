@@ -28,8 +28,29 @@ function drawBoard() {
     }
 }
 
+function isCoordValid(coord){ //Check if a coord as a String is valid
+    if(typeof coord !== 'string'){
+        return false
+    }
+    if(coord.length !== 2){
+        return false
+    }
+    let nums = '12345678'
+    let letters = 'abcdefgh'
+    if(!letters.includes(coord[0]) || !nums.includes(coord[1])){
+        return false
+    }
+
+    return true
+}
+
 function putQueen() {
     let coord = document.getElementById("square").value
+    if(!isCoordValid(coord)){
+        alert("Input coordinates wrong!")
+        return
+    }
+    //We can check if there is already a queen on this square, but it actually doesn't affect the program
     let targetSquare = document.getElementById(coord)
     let img = document.createElement('img')
     img.src = "assets/img/queen.png"
@@ -52,7 +73,10 @@ async function trySolution() {
             queenCoords.push(td.id)
         }
     })
-
+    if(queenCoords.length !== 8){
+        alert("Make sure you have exactly 8 queens on the board!")
+        return
+    }
     try {
         let sol = queenCoords.join('-')
         let url = "http://www.serveur-chess.fr/solve8queens?solution=" + sol
@@ -75,6 +99,7 @@ async function trySolution() {
 }
 
 
+//Change this function if you want some queens on page load!
 function putDefaultQueens() {
     let coords = ['e4', 'f4']
     coords.forEach(c => {
