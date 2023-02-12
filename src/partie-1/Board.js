@@ -17,6 +17,14 @@ export default class Board{
         return this.matrix.slice()
     }
 
+    clearBoard(){
+        for(let lin=0 ; lin<8 ; lin++){
+            for(let col=0 ; col<8 ; col++){
+                this.matrix[lin][col] = undefined
+            }
+        }
+    }
+
     getCoordAsString(line, col){ //Numbers //String
         let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
         let letterTemp = letters[col]
@@ -152,6 +160,8 @@ export default class Board{
 
         let isNumIncreasing = lineFrom < lineTo
         let isLetterIncreasing = colFrom < colTo
+        let isNumDecreasing = lineFrom > lineTo
+        let isLetterDecreasing = colFrom > colTo
 
         if(isNumIncreasing && isLetterIncreasing){ //up right
             for(let lin=lineFrom+1, col=colFrom+1 ; lin<lineTo && col<colTo ; lin++, col++){
@@ -159,30 +169,34 @@ export default class Board{
                     return false
                 }
             }
+            return true
         }
 
-        if(isNumIncreasing && !isLetterIncreasing){ //up left
+        if(isNumIncreasing && isLetterDecreasing){ //up left
             for(let lin=lineFrom+1, col=colFrom-1 ; lin<lineTo && col>colTo ; lin++, col--){
                 if(this.matrix[lin][col] !== undefined){
                     return false
                 }
             }
+            return true
         }
 
-        if(!isNumIncreasing && isLetterIncreasing){ //bottom right
+        if(isNumDecreasing && isLetterIncreasing){ //bottom right
             for(let lin=lineFrom-1, col=colFrom+1 ; lin>lineTo && col<colTo ; lin--, col++){
                 if(this.matrix[lin][col] !== undefined){
                     return false
                 }
             }
+            return true
         }
 
-        if(isNumIncreasing && !isLetterIncreasing){ //bottom left
+        if(isNumDecreasing && isLetterDecreasing){ //bottom left
             for(let lin=lineFrom-1, col=colFrom-1 ; lin>lineTo && col>colTo ; lin--, col--){
                 if(this.matrix[lin][col] !== undefined){
                     return false
                 }
             }
+            return true
         }
 
         if(isNumIncreasing){ //up
@@ -191,14 +205,16 @@ export default class Board{
                     return false
                 }
             }
+            return true
         }
 
-        if(!isNumIncreasing){ //bottom
+        if(isNumDecreasing){ //bottom
             for(let lin=lineFrom-1 ; lin>lineTo ; lin--){
                 if(this.matrix[lin][colTo] !== undefined){
                     return false
                 }
             }
+            return true
         }
 
         if(isLetterIncreasing){ //right
@@ -207,17 +223,19 @@ export default class Board{
                     return false
                 }
             }
+            return true
         }
 
-        if(!isLetterIncreasing){ //left
+        if(isLetterDecreasing){ //left
             for(let col=colFrom-1 ; col>colTo ; col--){
                 if(this.matrix[lineTo][col] !== undefined){
                     return false
                 }
             }
+            return true
         }
 
-        return true
+        // return true
     }
 
     isMoveCastleAttempt(fromCoord, toCoord){
@@ -352,13 +370,14 @@ export default class Board{
 
 
         let isKingWhite = piece.color === "white"
-
+        
+        //check if there is any free path from any opposing piece to the king
         for(let lin=0 ; lin<8 ; lin++){
             for(let col=0 ; col<8 ; col++){
                 if(this.matrix[lin][col] !== undefined){
                     if(this.matrix[lin][col].color === (isKingWhite ? 'black' : 'white') ){
                         let coord = this.getCoordAsString(lin, col)
-                        if(this.canIGoToKing(coord, kingPos)[0]){
+                        if(this.canIGoToThere(coord, kingPos)[0]){
                             return true
                         }
                     }
@@ -369,10 +388,50 @@ export default class Board{
         return false
     }
 
-    canIGoToKing(fromCoord, kingCoord){ // 2 Strings // [Bool, String]
-        //check if a piece could be move from fromCoord to kingCoord, return an array with a Bool and the reason
-        //Similar to canMovePiece(fromCoord, toCoord) but with fewer checks as it is castle specific
-        if(!this.isCoordValid(fromCoord) || !this.isCoordValid(kingCoord)){
+    isKingCheckMate(kingPos){
+        if(!this.isCoordValid(kingPos)){
+            throw new Error("isKingCheckMate failed, input invalid!")
+        }
+
+        if(!this.hasPiece(kingPos)){
+            throw new Error("isKingCheckMate failed, there is no piece here!")
+        }
+
+        let king = this.getPiece(kingPos)
+        if(king.name!=="King"){
+            throw new Error("isKingCheckMate failed, selected piece is not a king!")
+        }
+
+        if(!this.isKingChecked(kingPos)){
+            return false
+        }
+
+        let legalMoves = king.legalMoves()
+
+        let possibleMoves = legalMoves.filter(sqr => {
+            if(this.hasPiece(sqr)){
+                return (sqr.color !== king.color)
+            }else{
+                return true
+            }
+        }).filter(sqr => this.canIGoToThere(kingPos, sqr))
+
+        // console.log(legalMoves, possibleMoves);
+
+        let opposingColor = (king.color === 'white') ? 'black' : 'white'
+
+        possibleMoves.forEach(sqr => {
+            // console.log(sqr);
+            // console.log(this.isSquareDefended(sqr, opposingColor));
+            console.log(sqr, this.isSquareDefended(sqr, opposingColor));
+        })
+        return possibleMoves.every(sqr => this.isSquareDefended(sqr, opposingColor))
+    }
+
+    canIGoToThere(fromCoord, targetCoord){ // 2 Strings // [Bool, String]
+        //check if a piece could be move from fromCoord to targetCoord, return an array with a Bool and the reason
+        //Similar to canMovePiece(fromCoord, toCoord) but with fewer checks, usefull for checking if a position is defended
+        if(!this.isCoordValid(fromCoord) || !this.isCoordValid(targetCoord)){
             return [false, "Can't move, coord input invalid!"]
         }
 
@@ -384,19 +443,61 @@ export default class Board{
 
         let legalMoves = piece.legalMoves()
 
-        if(!legalMoves.includes(kingCoord)){
+        if(!legalMoves.includes(targetCoord)){
             return [false, "Can't move, this movement is illegal!"]
         }
 
-        if(!this.isPathFree(fromCoord, kingCoord)){
+        if(!this.isPathFree(fromCoord, targetCoord)){
             return [false, "Can't move, something is blocking!"]
         }
 
-        if(this.getPiece(fromCoord).color === this.getPiece(kingCoord).color){
-            return [false, "Can't move, you can't move to your own piece!"]
+        return [true, "Path is clear!"]
+    }
+
+    isSquareDefended(square, color){ // 2 Strings // Bool
+        //Check is a square, empty or occupied is defended by a color
+        let isOccupied = this.hasPiece(square)
+
+        if(isOccupied){
+            let piece = this.getPiece(square)
+            if(piece.color !== color){
+                let errMsg = `isSquareDefended failed, can't check if a ${piece.color} piece is defended by ${color}!`
+                throw new Error(errMsg)
+            }
+
+            //check if there is a free path from any own piece to the target pos
+            for(let lin=0 ; lin<8 ; lin++){
+                for(let col=0 ; col<8 ; col++){
+                    if(this.matrix[lin][col] !== undefined){
+                        if(this.matrix[lin][col].color === piece.color){
+                            let coord = this.getCoordAsString(lin, col)
+                            if(this.canIGoToThere(coord, square)[0]){
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
+
+        }else{
+            //check if there is a free path from any own piece to the target pos
+            for(let lin=0 ; lin<8 ; lin++){
+                for(let col=0 ; col<8 ; col++){
+                    if(this.matrix[lin][col] !== undefined){
+                        if(this.matrix[lin][col].color === color){
+                            let coord = this.getCoordAsString(lin, col)
+                            // console.log(coord, square, this.canIGoToThere(coord, square));
+                            if(this.canIGoToThere(coord, square)[0]){
+                                console.log('the possible path is:', coord, square);
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        return [true, "Oh oh King is in danger"]
+        return false
     }
 
     isCastleTransitSecured(fromCoord, toCoord){ //2 Strings // Bool
@@ -414,7 +515,7 @@ export default class Board{
                         if(this.matrix[lin][col] !== undefined){
                             if(this.matrix[lin][col].color !== castleColor ){
                                 let coord = this.getCoordAsString(lin, col)
-                                if(this.canIGoToKing(coord, sqr)[0]){
+                                if(this.canIGoToThere(coord, sqr)[0]){
                                     res = false
                                 }
                             }
@@ -431,7 +532,7 @@ export default class Board{
                         if(this.matrix[lin][col] !== undefined){
                             if(this.matrix[lin][col].color !== castleColor ){
                                 let coord = this.getCoordAsString(lin, col)
-                                if(this.canIGoToKing(coord, sqr)[0]){
+                                if(this.canIGoToThere(coord, sqr)[0]){
                                     res = false
                                 }
                             }
@@ -448,7 +549,7 @@ export default class Board{
                         if(this.matrix[lin][col] !== undefined){
                             if(this.matrix[lin][col].color !== castleColor ){
                                 let coord = this.getCoordAsString(lin, col)
-                                if(this.canIGoToKing(coord, sqr)[0]){
+                                if(this.canIGoToThere(coord, sqr)[0]){
                                     res = false
                                 }
                             }
@@ -465,7 +566,7 @@ export default class Board{
                         if(this.matrix[lin][col] !== undefined){
                             if(this.matrix[lin][col].color !== castleColor ){
                                 let coord = this.getCoordAsString(lin, col)
-                                if(this.canIGoToKing(coord, sqr)[0]){
+                                if(this.canIGoToThere(coord, sqr)[0]){
                                     res = false
                                 }
                             }

@@ -9,6 +9,7 @@ export default class Game{
         this.board = new Board()
         this.putStandardPosition()
         this.isWhiteToPlay = true
+        this.turn = 1
     }
 
     putStandardPosition(){
@@ -27,10 +28,15 @@ export default class Game{
         return this.board.showBoard()
     }
 
+    clearBoard(){
+        this.board.clearBoard()
+    }
+
     movePiece(fromCoord, toCoord){
         try {
             this.board.movePiece(fromCoord, toCoord)
             this.isWhiteToPlay = !this.isWhiteToPlay
+            this.turn++
         } catch (error) {
             console.log(error);
         }
