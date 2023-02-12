@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/choose_problem" method="GET">
+        <div>
+            <label for="puzzle-select">Choisissez un problème :</label>
+            <select name="problem" id="puzzle-select">
+                <option value="8-queens" selected>Problème des 8 dames</option>
+                <option value="4-queens-1-bishop">Problème des 4 dames et 1 fou</option>
+                <option value="2-queens-2-rooks">Problème des 2 dames et 2 tours</option>
+            </select>
+            <button type="submit">Démarrer</button>
+        </div>
+    </form>
+</body>
+</html>
