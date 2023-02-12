@@ -1,0 +1,4 @@
+// Question 23. On souhaite généraliser le problème des huit dames (et uniquement ce problème) et faire en sorte que l'échiquier soit de N x N cases (N étant un nombre positif donné lors de la création du Board). Discuter de l'impact de cette généralisation sur la conception réalisée jusqu'à présent. Vous préciserez quels sont les impacts sur les classes et sur leurs méthodes.
+
+//Tout le système de coordonnés basé sur xk avec x une lettre et k un chiffre par String devra être repensé. cela touche nombres de méthodes  qui interagissent avec l'utilisateur ainsi que les transit des données entre méthodes. Certaines boucles qui travaillent dirrectement sur la matrice pourront être conservées. Autant Board que les classes Pièces seront affectées.
+//Le roque, actuellement hard-codé devra être repensé.
