@@ -148,6 +148,18 @@ export default class Board{
         console.log("Movement successful!");
     }
 
+    forceMovePiece(fromCoord, toCoord){ // 2 Strings // Void
+        //move a piece, doesn't check anything
+        let piece = this.getPiece(fromCoord)
+
+        let [colTo, lineTo] = this.lineColSplitter(toCoord)
+
+        this.matrix[lineTo][colTo] = piece //change coord in Board
+        piece.newPos(toCoord) //change coord in Piece
+        piece.hasMove = true //change hasMove status (usefull for Rooks and Kings)
+        this.removePiece(fromCoord) //remove initial position
+    }
+
     isPathFree(fromCoord, toCoord){ // 2 Strings // Bool : check if a movement is free to do (if there is no piece between fromCoord and toCoord)
         //if number is increasing => line is increasing (go up)
         //if letter is increasing => col in increasing (go right)
@@ -389,6 +401,8 @@ export default class Board{
     }
 
     isKingCheckMate(kingPos){
+        //! DOES NOT GIVE THE RESULT HOPED FOR
+        //Idea was good, but it doesn't work
         if(!this.isCoordValid(kingPos)){
             throw new Error("isKingCheckMate failed, input invalid!")
         }
@@ -416,16 +430,56 @@ export default class Board{
             }
         }).filter(sqr => this.canIGoToThere(kingPos, sqr))
 
-        // console.log(legalMoves, possibleMoves);
-
         let opposingColor = (king.color === 'white') ? 'black' : 'white'
 
-        possibleMoves.forEach(sqr => {
-            // console.log(sqr);
-            // console.log(this.isSquareDefended(sqr, opposingColor));
-            console.log(sqr, this.isSquareDefended(sqr, opposingColor));
-        })
+        //check if every possible moves sqares is defended by the opposite color - this doesn't conclude if the king is check mate
         return possibleMoves.every(sqr => this.isSquareDefended(sqr, opposingColor))
+    }
+
+    isKingCheckMateV2(kingPos){
+        if(!this.isCoordValid(kingPos)){
+            throw new Error("isKingCheckMate failed, input invalid!")
+        }
+
+        if(!this.hasPiece(kingPos)){
+            throw new Error("isKingCheckMate failed, there is no piece here!")
+        }
+
+        let king = this.getPiece(kingPos)
+        if(king.name!=="King"){
+            throw new Error("isKingCheckMate failed, selected piece is not a king!")
+        }
+
+        if(!this.isKingChecked(kingPos)){
+            return false
+        }
+
+        let legalMoves = king.legalMoves()
+
+        let possibleMoves = legalMoves.filter(sqr => {
+            if(this.hasPiece(sqr)){
+                return (sqr.color !== king.color)
+            }else{
+                return true
+            }
+        }).filter(sqr => this.canIGoToThere(kingPos, sqr))
+
+
+        let res = true
+        possibleMoves.forEach(sqr => {
+            let prevPiece = this.hasPiece(sqr) ? this.hasPiece(sqr) : undefined
+            let [colPrevPiece, linePrevPiece] = this.lineColSplitter(sqr)
+            //test new pos
+            this.forceMovePiece(kingPos, sqr)
+            //console.log(this.showBoard(), this.isKingChecked(sqr), sqr)
+            if(!this.isKingChecked(sqr)){
+                res = false
+            }
+            //backtrack
+            this.forceMovePiece(sqr, kingPos)
+            this.matrix[linePrevPiece][colPrevPiece] = prevPiece
+        })
+        return res
     }
 
     canIGoToThere(fromCoord, targetCoord){ // 2 Strings // [Bool, String]
