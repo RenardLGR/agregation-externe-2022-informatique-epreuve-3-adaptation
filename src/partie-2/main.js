@@ -1,5 +1,7 @@
 let putQueenButton = document.getElementById("putQueen")
 putQueenButton.addEventListener('click', putQueen)
+let removeQueenButton = document.getElementById("removeQueen")
+removeQueenButton.addEventListener('click', removeQueen)
 
 //Initialize
 drawBoard()
@@ -30,4 +32,11 @@ function putQueen(){
     img.src = "assets/img/queen.png"
     img.alt = "queen"
     targetSquare.appendChild(img)
+}
+
+function removeQueen(){
+    let coord = document.getElementById("square").value
+    let targetSquare = document.getElementById(coord)
+
+    targetSquare.removeChild(targetSquare.firstChild);
 }
