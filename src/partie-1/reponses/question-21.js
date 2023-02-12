@@ -31,14 +31,14 @@ import Problem8Queens from "../Problem8Queens.js";
 // board1.clearBoard()
 // board1.putPiece(['c6'], Queen, 'white')
 
-// // console.log(board1.isSquareDefended('b8', 'white')) // false
-// // console.log(board1.isSquareDefended('c8', 'white')) // true
-// // console.log(board1.isSquareDefended('a8', 'white')) // true
+// console.log(board1.isSquareDefended('b8', 'white')) // false
+// console.log(board1.isSquareDefended('c8', 'white')) // true
+// console.log(board1.isSquareDefended('a8', 'white')) // true
 
 // board1.putPiece(['e8'], Bishop, 'white')
-// // console.log(board1.isSquareDefended('e8', 'white')) // true
+// console.log(board1.isSquareDefended('e8', 'white')) // true
 
-// // ____________
+// ____________
 // let board2 = new Board()
 // board2.clearBoard()
 
@@ -48,7 +48,7 @@ import Problem8Queens from "../Problem8Queens.js";
 // board2.putPiece(['f4'], Bishop, 'white')
 // board2.putPiece(['h7', 'e8'], Rook, 'white')
 
-// // console.log(board2.isKingCheckMate('c8')); //true
+// console.log(board2.isKingCheckMate('c8')); //true
 
 // let board3 = new Board()
 // board3.clearBoard()
@@ -58,7 +58,7 @@ import Problem8Queens from "../Problem8Queens.js";
 // board3.putPiece(['e4'], Bishop, 'white')
 // board3.putPiece(['e8'], Rook, 'white')
 
-// // console.log(board3.isKingCheckMate('c8')); //false // c7 open
+// console.log(board3.isKingCheckMate('c8')); //false // c7 open
 
 // let board4 = new Board()
 // board4.clearBoard()
@@ -107,4 +107,4 @@ board5.putPiece(['d8'], King, 'black')
 board5.putPiece(['c4'], Queen, 'white')
 board5.putPiece(['e8', 'a7'], Rook, 'white')
 
-console.log(board5.isKingCheckMateV2('d8')); //false
+// console.log(board5.isKingCheckMateV2('d8')); //false
